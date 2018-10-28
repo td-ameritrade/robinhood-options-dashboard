@@ -5,64 +5,78 @@ const BS = require('../../services/black-scholes.js');
 const fixFloat = value => parseFloat(parseFloat(value).toFixed(2));
 
 export const simulatedPrices = async ({ commit, state }) => {
+  console.log('simpriceaction');
   const quote = await getQuote(state.analysisSymbol);
   commit('QUOTE_DATA', quote[state.analysisSymbol]);
 
-
   const prices = [];
-  let priceinc = quote[state.analysisSymbol].underlyingPrice -
+  let price = quote[state.analysisSymbol].underlyingPrice -
   (state.priceIncrementCount * state.priceIncrementAmount);
 
+  // calculate the price steps starting with the lowest (increment * -1)
   for (let i = state.priceIncrementCount * -1; i < state.priceIncrementCount; i += 1) {
-    priceinc += state.priceIncrementAmount;
-    prices.push(fixFloat(priceinc));
+    price += state.priceIncrementAmount;
+    prices.push(fixFloat(price));
   }
+  console.log(prices);
+
   commit('SET_PRICE_ARRAY', prices);
-  // console.log(prices);
+  // dispatch('calculateOptionPrice');
 };
 
-export const calculateOptionPrice = async () => {
-  const prices = [];
-
-  let priceinc = this.openPositions[0].underlyingprice - (this.length * this.increment);
-
-  for (let i = this.length * -1; i < this.length; i += 1) {
-    priceinc += this.increment;
-    prices.push(priceinc);
-  }
-  // console.log(prices);
-  const optionPrices = [];
-  prices.forEach((price) => {
+export const calculateOptionPrice = async ({ rootState, state }) => {
+  console.log('calcpriceaction');
+  try {
+    const optionPrices = [];
+    state.priceArray.forEach((price) => {
     // console.log(this.openPositions[0]);
-    let type;
-    if (this.openPositions[0].type === 'P') {
-      type = 'put';
-    } else {
-      type = 'call';
-    }
-    const optionPrice = BS.blackScholes(
-      price,
-      this.openPositions[0].strike,
-      (this.openPositions[0].daystoexpiration / 365),
-      this.openPositions[0].impVol / 100,
-      0.025,
-      type,
-    );
+      let type;
+      if (state.quoteData.contractType === 'P') {
+        type = 'put';
+      } else {
+        type = 'call';
+      }
+      const optionPrice = BS.blackScholes(
+        price,
+        state.quoteData.strikePrice,
+        (state.quoteData.daystoexpiration / 365),
+        state.quoteData.volatility / 100,
+        0.025,
+        type,
+      );
+      console.log(optionPrice);
       // eslint-disable-next-line
-      const positionProfit = (this.openPositions[0].quantity * optionPrice * 100) - this.openPositions[0].costbasis;
-    optionPrices.push(positionProfit);
-  });
-  // console.log(optionPrices);
+      const positionProfit = (rootState.openposition[state.analysisSymbol].quantity * optionPrice * 100) - this.openPositions[0].costbasis;
+      optionPrices.push(positionProfit);
+    });
+    // console.log(optionPrices);
 
-  // eslint-disable-next-line
+    // eslint-disable-next-line
     // In the same way, update the series option
-  // return Object.assign([], { name: 'series1' }, { data: this.positionTotal });
-  this.series = [{
-    data: optionPrices,
-  }];
-  this.options = {
-    xaxis: {
-      categories: prices,
-    },
-  };
+    // return Object.assign([], { name: 'series1' }, { data: this.positionTotal });
+    this.series = [{
+      data: optionPrices,
+    }];
+    this.options = {
+      xaxis: {
+        categories: optionPrices,
+      },
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
 };
+
+
+export const changeAnalysisSymbol = async ({ dispatch, state, commit }, payload) => {
+  try {
+    if (state.analysisSymbol !== payload) {
+      await commit('SET_ANALYSIS_SYMBOL', payload);
+      await dispatch('simulatedPrices');
+      await dispatch('calculateOptionPrice');
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+

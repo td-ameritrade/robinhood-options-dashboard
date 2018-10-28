@@ -60,7 +60,7 @@
 
 <script>
 import VueApexCharts from 'vue-apexcharts';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 const BS = require('.././services/black-scholes.js');
 
@@ -71,6 +71,7 @@ export default {
   },
   data() {
     return {
+      analysisSymbol: '',
       // selectOptions: [
       //   {
       //     label: 'Google',
@@ -87,7 +88,7 @@ export default {
           id: 'vuechart-example',
         },
         xaxis: {
-          numeric: this.priceArray(),
+          numeric: this.priceArray,
         },
       },
       series: [{
@@ -101,21 +102,23 @@ export default {
   },
   computed: {
     ...mapGetters('robinhood', ['uniqueSymbols', 'positionTotal', 'openPositions']),
+    ...mapState('robinhood', ['openposition']),
     analysisSymbol: {
       get() {
         return this.$store.state.optionstrategy.analysisSymbol;
       },
       set(val) {
-        this.$store.commit('optionstrategy/SET_ANALYSIS_SYMBOL', val);
+        this.$store.dispatch('optionstrategy/changeAnalysisSymbol', val);
       },
     },
     selectOptions: {
       get() {
         const options = [];
-        this.openPositions.forEach((symbol) => {
+        this.openposition.forEach((symbol) => {
           options.push({
             label: symbol.TDAPI,
             value: symbol.TDAPI,
+            quantity: symbol.quantity,
           });
         });
         return options;
@@ -140,14 +143,14 @@ export default {
     priceArray() {
       return this.$store.state.optionstrategy.priceArray;
     },
-    BSPrices: () => {
-      const prices = [];
-      for (let i; i < 8; i += 1) {
-        prices.push(200);
-        // console.log(prices);
-      }
-      return prices;
-    },
+    // BSPrices: () => {
+    //   const prices = [];
+    //   for (let i; i < 8; i += 1) {
+    //     prices.push(200);
+    //     // console.log(prices);
+    //   }
+    //   return prices;
+    // },
   },
   beforeMount() {
     this.updateChart();
@@ -155,37 +158,33 @@ export default {
   methods: {
     createSimulatedPrices() {
       this.$store.dispatch('optionstrategy/simulatedPrices');
+      // this.$store.dispatch('optionstrategy/calculateOptionPrice');
     },
-    BSPriced() {
-      for (let i; i < this.length; i += 1) {
-        this.prices.push(300);
-        // console.log(this.prices);
-      }
-    },
+    // BSPriced() {
+    //   for (let i; i < this.length; i += 1) {
+    //     this.prices.push(300);
+    //     // console.log(this.prices);
+    //   }
+    // },
     updateChart() {
-      const prices = [];
+      const prices = this.priceArray;
 
-      let priceinc = this.openPositions[0].underlyingprice - (this.incrementCount * this.increment);
+      console.log(prices);
 
-      for (let i = this.incrementCount * -1; i < this.incrementCount; i += 1) {
-        priceinc += this.increment;
-        prices.push(priceinc);
-      }
-      // console.log(prices);
       const optionPrices = [];
       prices.forEach((price) => {
         // console.log(this.openPositions[0]);
         let type;
-        if (this.openPositions[0].type === 'P') {
+        if (this.openposition.type === 'P') {
           type = 'put';
         } else {
           type = 'call';
         }
         const optionPrice = BS.blackScholes(
           price,
-          this.openPositions[0].strike,
-          (this.openPositions[0].daystoexpiration / 365),
-          this.openPositions[0].impVol / 100,
+          this.openposition.strike,
+          (this.openposition.daystoexpiration / 365),
+          this.openposition.impVol / 100,
           0.025,
           type,
         );
@@ -193,7 +192,7 @@ export default {
         const positionProfit = (this.openPositions[0].quantity * optionPrice * 100) - this.openPositions[0].costbasis;
         optionPrices.push(positionProfit);
       });
-      // console.log(optionPrices);
+      console.log(optionPrices);
 
       // eslint-disable-next-line
       // In the same way, update the series option

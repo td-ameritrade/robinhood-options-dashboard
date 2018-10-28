@@ -3,8 +3,8 @@
     padding
     class="row justify-center">
     <div style="width: 800px; max-width: 90vw;" >
-      Coming Soon
-      <!-- <OptionAnalysis /> -->
+      <!-- Coming Soon -->
+      <OptionAnalysis />
     </div>
   </q-page>
 </template>
@@ -15,12 +15,12 @@
 
 <script>
 
-// import OptionAnalysis from '.././components/OptionAnalysis';
+import OptionAnalysis from '.././components/OptionAnalysis';
 
 export default {
   name: 'Analysis',
   components: {
-    // OptionAnalysis,
+    OptionAnalysis,
   },
   data() {
     return {
