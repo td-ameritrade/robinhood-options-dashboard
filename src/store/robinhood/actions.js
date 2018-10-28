@@ -4,7 +4,7 @@ import userinfo from '../../../config.js';
 const Robinhood = require('robinhood');
 
 
-export const getRobinhoodOptionData = async ({ dispatch }, payload) => {
+export const fetchRobinhoodInstrumentData = async ({ dispatch }, payload) => {
   try {
     const robinhood = new Robinhood(userinfo.credentials, () => {
       robinhood.options_instrument(payload.option, (err, response, body) => {
@@ -28,6 +28,13 @@ export const getAccountData = async ({ commit, dispatch }) => {
         commit('ACCOUNT', body.results);
         dispatch('getOptionLegs');
       });
+      console.log('32');
+      robinhood.orders((err, response, body) => {
+        // commit('ACCOUNT', body.results);
+        // dispatch('getOptionLegs');
+        commit('OPTION_ORDERS', body);
+        console.log(body);
+      });
     } catch (e) {
       throw new Error(e);
     }
@@ -49,7 +56,7 @@ export const getOptionLegs = async ({ commit, dispatch }) => {
             position.quantity *= 1.0;
           }
 
-          dispatch('getRobinhoodOptionData', position);
+          dispatch('fetchRobinhoodInstrumentData', position);
         });
       });
     } catch (e) {

@@ -1,4 +1,5 @@
 export default {
+  orders: {},
   openpositions: [
     {
       intraday_average_open_price: '-417.6000',

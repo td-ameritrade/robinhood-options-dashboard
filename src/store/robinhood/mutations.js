@@ -20,6 +20,12 @@ export const QUOTE = (state, payload) => {
   state.quotes = Object.assign({}, state.quotes, payload);
 };
 
+export const OPTION_ORDERS = (state, payload) => {
+  // const temp = Object.assign({}, state.quotes);
+  // state.quotes.push(payload);
+  state.orders = Object.assign({}, state.orders, payload);
+};
+
 export const UPDATE_POSITION_DATA = (state) => {
   state.openpositions.forEach((position) => {
     const positionData = Object.assign(position, {
