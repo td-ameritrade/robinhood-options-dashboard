@@ -14,6 +14,7 @@
     "apexcharts": "^2.1.5",
     "axios": "^0.18.0",
     "chart.js": "^2.7.3",
+    "greeks": "^1.0.0",
     "laue": "^0.1.1",
     "robinhood": "git+https://github.com/ryanhendricks/robinhood-node.git#additionalfeatures",
     "vue-apexcharts": "^1.2.2",

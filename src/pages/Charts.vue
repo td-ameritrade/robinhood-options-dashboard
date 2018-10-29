@@ -2,8 +2,10 @@
   <q-page
     padding
     class="row justify-center">
-    <div style="width: 800px; max-width: 90vw;" >
-      <TradingVueCharts />
+    <div >
+      <!-- <div style="width: 800px; max-width: 90vw;" > -->
+      <!-- <TradingVueCharts /> -->
+      <Chart />
     </div>
   </q-page>
 </template>
@@ -14,12 +16,14 @@
 
 <script>
 
-import TradingVueCharts from '.././components/TradingVueCharts';
+// import TradingVueCharts from '.././components/TradingVueCharts';
+import Chart from '.././components/Chart';
 
 export default {
   name: 'Charts',
   components: {
-    TradingVueCharts,
+    // TradingVueCharts,
+    Chart,
 
   },
   data() {

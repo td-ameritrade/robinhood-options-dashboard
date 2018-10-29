@@ -5,24 +5,28 @@
         <q-item-side icon="mic" />
         <q-item-main>
           <q-slider
-            v-model="increment"
+            v-model="increment.amount"
             :min="0"
             :max="10"
             :step="0.01"
             label-always
-            label/>
+            label
+
+            @select="updatePriceArray()"/>
         </q-item-main>
       </q-item>
       <q-item>
         <q-item-side icon="mic" />
         <q-item-main>
           <q-slider
-            v-model="incrementCount"
+            v-model="increment.count"
             :min="0"
             :max="10"
             :step="1"
             label-always
-            label/>
+
+            label
+            @select="updatePriceArray()"/>
         </q-item-main>
       </q-item>
       <q-item>
@@ -32,6 +36,7 @@
             v-model="analysisSymbol"
             :options="selectOptions"
             float-label="Symbol for Analysis"
+            @select="updatePriceArray()"
 
           />
         </q-item-main>
@@ -41,9 +46,9 @@
     <q-btn
       label="update"
       @click="updateChart()" />
-    <q-btn
+    <!-- <q-btn
       label="update"
-      @click="createSimulatedPrices()" />
+      @click="createSimulatedPrices()" /> -->
     <apexcharts
       :options="options"
       :series="series"
@@ -64,6 +69,8 @@ import { mapGetters, mapState } from 'vuex';
 
 const BS = require('.././services/black-scholes.js');
 
+const fixFloat = value => parseFloat(parseFloat(value).toFixed(2));
+
 export default {
   name: 'OptionAnalysis',
   components: {
@@ -72,139 +79,120 @@ export default {
   data() {
     return {
       analysisSymbol: '',
-      // selectOptions: [
-      //   {
-      //     label: 'Google',
-      //     value: 'goog',
-      //   },
-      //   {
-      //     label: 'Facebook',
-      //     value: 'fb',
-      //   },
-      // ],
-      price: 200,
+      increment: {
+        amount: 0.25,
+        count: 6,
+      },
+      optionPrices: [],
+      series: [{
+        data: [],
+      }],
       options: {
         chart: {
-          id: 'vuechart-example',
+          type: 'line',
         },
         xaxis: {
-          numeric: this.priceArray,
+          categories: this.priceArray,
         },
+
+        // xaxis: {
+        //   type: 'numeric',
+        //   categories: [],
+        // },
       },
-      series: [{
-        name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91, 49, 60, 70, 91],
-      }, {
-        name: 'series-2',
-        data: [30, 50, 45, 50, 29, 60, 70, 91],
-      }],
+      // options: {
+      //         chart: {
+      //           id: 'vuechart-example',
+      //         },
+      //         xaxis: {
+      //           categories: this.priceArray,
+      //         },
+      //       },
+      // series: [{
+      //   name: 'series-1',
+      //   data: this.optionPrices,
+      // }],
     };
   },
   computed: {
     ...mapGetters('robinhood', ['uniqueSymbols', 'positionTotal', 'openPositions']),
     ...mapState('robinhood', ['openposition']),
-    analysisSymbol: {
-      get() {
-        return this.$store.state.optionstrategy.analysisSymbol;
-      },
-      set(val) {
-        this.$store.dispatch('optionstrategy/changeAnalysisSymbol', val);
-      },
-    },
     selectOptions: {
       get() {
         const options = [];
         this.openposition.forEach((symbol) => {
           options.push({
             label: symbol.TDAPI,
-            value: symbol.TDAPI,
-            quantity: symbol.quantity,
+            value: symbol,
+            // quantity: symbol.quantity,
           });
         });
         return options;
       },
     },
-    increment: {
-      get() {
-        return this.$store.state.optionstrategy.priceIncrementAmount;
-      },
-      set(val) {
-        this.$store.commit('optionstrategy/SET_PRICE_INCREMENT_AMOUNT', val);
-      },
-    },
-    incrementCount: {
-      get() {
-        return this.$store.state.optionstrategy.priceIncrementCount;
-      },
-      set(val) {
-        this.$store.commit('optionstrategy/SET_PRICE_INCREMENT_COUNT', val);
-      },
-    },
     priceArray() {
-      return this.$store.state.optionstrategy.priceArray;
+      const prices = [];
+      let price = this.analysisSymbol.underlyingprice -
+        (this.increment.count * this.increment.amount);
+
+      // calculate the price steps starting with the lowest (increment * -1)
+      for (let i = this.increment.count * -1; i < this.increment.count; i += 1) {
+        price += this.increment.amount;
+        prices.push(fixFloat(price));
+      }
+      return prices;
     },
-    // BSPrices: () => {
-    //   const prices = [];
-    //   for (let i; i < 8; i += 1) {
-    //     prices.push(200);
-    //     // console.log(prices);
-    //   }
-    //   return prices;
-    // },
   },
   beforeMount() {
-    this.updateChart();
+    // this.updateChart();
   },
   methods: {
-    createSimulatedPrices() {
-      this.$store.dispatch('optionstrategy/simulatedPrices');
-      // this.$store.dispatch('optionstrategy/calculateOptionPrice');
-    },
-    // BSPriced() {
-    //   for (let i; i < this.length; i += 1) {
-    //     this.prices.push(300);
-    //     // console.log(this.prices);
-    //   }
-    // },
     updateChart() {
-      const prices = this.priceArray;
+      try {
+        const chartData = [];
+        console.log(this.priceArray);
+        this.priceArray.forEach((price) => {
+          // console.log(this.openPositions[0]);
+          let type;
+          if (this.analysisSymbol.contractType === 'P') {
+            type = 'put';
+          } else {
+            type = 'call';
+          }
+          console.log(type);
+          const optionPrice = BS.blackScholes(
+            price,
+            this.analysisSymbol.strike_price,
+            (this.analysisSymbol.daystoexpiration / 365),
+            this.analysisSymbol.impVol / 100,
+            0.025,
+            type,
+          );
+          const chartDataPoint = {
+            x: price,
+            y: optionPrice,
+          };
+          console.log(optionPrice);
+          // eslint-disable-next-line
+      // const positionProfit = (optionPrice);
+          chartData.push(chartDataPoint);
+          // this.series.data.push(chartDataPoint);
+          // });
+          // const positionProfit = (this.analysisSymbol.quantity *
+          // optionPrice * 100) - this.analysisSymbol.costbasis;
+          //     optionPrices.push(positionProfit);
+          //   });        // console.log(optionPrices);
 
-      console.log(prices);
-
-      const optionPrices = [];
-      prices.forEach((price) => {
-        // console.log(this.openPositions[0]);
-        let type;
-        if (this.openposition.type === 'P') {
-          type = 'put';
-        } else {
-          type = 'call';
-        }
-        const optionPrice = BS.blackScholes(
-          price,
-          this.openposition.strike,
-          (this.openposition.daystoexpiration / 365),
-          this.openposition.impVol / 100,
-          0.025,
-          type,
-        );
-        // eslint-disable-next-line
-        const positionProfit = (this.openPositions[0].quantity * optionPrice * 100) - this.openPositions[0].costbasis;
-        optionPrices.push(positionProfit);
-      });
-      console.log(optionPrices);
-
-      // eslint-disable-next-line
-      // In the same way, update the series option
-      // return Object.assign([], { name: 'series1' }, { data: this.positionTotal });
-      this.series = [{
-        data: optionPrices,
-      }];
-      this.options = {
-        xaxis: {
-          categories: this.priceArray,
-        },
-      };
+          // eslint-disable-next-line
+    // In the same way, update the series option
+          // return Object.assign([], { name: 'series1' }, { data: this.positionTotal });
+        });
+        this.series = [{
+          data: chartData,
+        }];
+      } catch (e) {
+        throw new Error(e);
+      }
     },
 
   },
