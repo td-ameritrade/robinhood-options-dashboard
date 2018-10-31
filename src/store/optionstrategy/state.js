@@ -3,5 +3,7 @@ export default {
   priceIncrementCount: 8,
   symbolPosition: '',
   analysisSymbol: '',
+  analysisSymbols: [],
+  underlyingSymbol: '',
   priceArray: [],
 };

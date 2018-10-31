@@ -46,7 +46,7 @@ export const calculateOptionPrice = async ({ rootState, state }) => {
       );
       console.log(optionPrice);
       // eslint-disable-next-line
-      const positionProfit = (rootState.openposition[state.analysisSymbol].quantity * optionPrice * 100) - this.openPositions[0].costbasis;
+      const positionProfit = (rootState.openposition[state.analysisSymbol].quantity * optionPrice * 100) - rootState.openposition[state.analysisSymbol].costbasis;
       optionPrices.push(positionProfit);
     });
     // console.log(optionPrices);
@@ -68,15 +68,73 @@ export const calculateOptionPrice = async ({ rootState, state }) => {
 };
 
 
-export const changeAnalysisSymbol = async ({ dispatch, state, commit }, payload) => {
+export const updateSymbolPriceArrays = async ({ dispatch, state, commit }, payload) => {
   try {
-    if (state.analysisSymbol !== payload) {
-      await commit('SET_ANALYSIS_SYMBOL', payload);
-      await dispatch('simulatedPrices');
-      await dispatch('calculateOptionPrice');
-    }
+    // if (state.analysisSymbol !== payload) {
+    await dispatch('simulatedPrices');
+    await dispatch('calculateOptionPrice');
+    console.log(payload);
+    const symbols = [];
+    state.analysisSymbols.forEach((symbol) => {
+      symbols.push(symbol);
+    });
+    payload.forEach((element) => {
+      symbols.push(element);
+    });
+    const uniqueSymbols = symbols.filter((item, index) => symbols.indexOf(item) >= index);
+    await commit('SET_ANALYSIS_SYMBOLS', uniqueSymbols);
+    // }
   } catch (e) {
     throw new Error(e);
   }
 };
+
+// export const changeAnalysisSymbol = async ({ dispatch, state, commit }, payload) => {
+//   try {
+//     // if (state.analysisSymbol !== payload) {
+//     // await commit('SET_ANALYSIS_SYMBOL', payload);
+
+
+//     const symbols = [];
+//     state.analysisSymbols.forEach((symbol) => {
+//       symbols.push(symbol);
+//     });
+//     const uniqueSymbols = symbols.filter((item, index) => symbols.indexOf(payload) >= index);
+//     await commit('SET_ANALYSIS_SYMBOLS', uniqueSymbols);
+//     await dispatch('simulatedPrices');
+//     await dispatch('calculateOptionPrice');
+//     // }
+//   } catch (e) {
+//     throw new Error(e);
+//   }
+// };
+
+/* eslint-disable */
+export const aggregateUnderlyingSimulations = async ({ rootState, state, commit }) => {
+  try {
+    const optionPrices = [];
+    const filteredPositions = rootState.robinhood.openposition.filter(e => parseFloat(e.TDAPI.substr(0, 2) === state.underlyingSymbol));
+    console.log(filteredPositions);
+    state.priceArray.forEach((price) => {
+    // console.log(this.openPositions[0]);
+      let type;
+      if (state.quoteData.contractType === 'P') {
+        type = 'put';
+      } else {
+        type = 'call';
+      }
+      const optionPrice = BS.blackScholes(
+        price,
+        state.quoteData.strikePrice,
+        (state.quoteData.daystoexpiration / 365),
+        state.quoteData.volatility / 100,
+        0.025,
+        type,
+      );
+    });
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+/* eslint-enable */
 
