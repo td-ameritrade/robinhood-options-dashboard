@@ -46,10 +46,10 @@
 
 <script>
 
-import PerformanceTable from '.././components/PerformanceTable';
-import PortfolioTable from '.././components/PortfolioTable';
-// import GreeksTable from '.././components/GreeksTable';
-import PositionGreeksTable from '.././components/PositionGreeksTable';
+import PerformanceTable from '.././components/tables/PerformanceTable';
+import PortfolioTable from '.././components/tables/PortfolioTable';
+// import GreeksTable from '.././components/tables/GreeksTable';
+import PositionGreeksTable from '.././components/tables/PositionGreeksTable';
 
 export default {
   name: 'PageIndex',
