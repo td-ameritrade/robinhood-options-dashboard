@@ -4,8 +4,20 @@ const BS = require('../../services/black-scholes.js');
 
 const fixFloat = value => parseFloat(parseFloat(value).toFixed(2));
 
+// const createSimulatedPriceArray = (basePrice, count, amount) => {
+//   const prices = [];
+//   let price = basePrice - (count * amount);
+
+//   // calculate the price steps starting with the lowest (increment * -1)
+//   for (let i = count * -1; i < count; i += 1) {
+//     price += amount;
+//     prices.push(fixFloat(price));
+//   }
+//   return prices;
+// };
+
+
 export const simulatedPrices = async ({ commit, state }) => {
-  console.log('simpriceaction');
   const quote = await getQuote(state.analysisSymbol);
   commit('QUOTE_DATA', quote[state.analysisSymbol]);
 

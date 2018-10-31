@@ -105,7 +105,7 @@ export default {
   methods: {
     updateSymbols() {
       console.log('fired');
-      this.$store.dispatch('optionstrategy/updateSymbolPriceArrays');
+      // this.$store.dispatch('optionstrategy/updateSymbolPriceArrays');
     },
   },
 };
