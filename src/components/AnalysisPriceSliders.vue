@@ -1,36 +1,49 @@
 <template>
-  <div>  <div>
-    <q-list style="width: 400px">
-      <q-item>
-        <q-item-side icon="mic" />
-        <q-item-main>
-          <q-slider
-            v-model="increment.amount"
-            :min="0"
-            :max="10"
-            :step="0.01"
-            label-always
-            label
-
-            @select="updatePriceArray()"/>
-        </q-item-main>
-      </q-item>
-      <q-item>
-        <q-item-side icon="mic" />
-        <q-item-main>
-          <q-slider
-            v-model="increment.count"
-            :min="0"
-            :max="10"
-            :step="1"
-            label-always
-
-            label
-            @select="updatePriceArray()"/>
-        </q-item-main>
-      </q-item>
-    </q-list>
-  </div>
+  <div>
+    <div>
+      <q-list>
+        <q-item>
+          <q-item-side icon="mic" />
+          <q-item-main>
+            <q-select
+              v-model="analysisSymbols"
+              :options="selectOptions"
+              multiple
+              float-label="Symbol for Analysis"
+              @blur="updateSymbols()"
+            />
+          </q-item-main>
+        </q-item>
+        <q-item>
+          <q-item-side>Price Increment</q-item-side>
+          <q-item-main>
+            <q-field helper="price increment between points">
+              <q-slider
+                v-model="incrementAmount"
+                :min="0.01"
+                :max="10"
+                :step="0.05"
+                label-always
+                label />
+            </q-field>
+          </q-item-main>
+        </q-item>
+        <q-item>
+          <q-item-side># Increments</q-item-side>
+          <q-item-main>
+            <q-field helper="number of price increments to plot">
+              <q-slider
+                v-model="incrementCount"
+                :min="0"
+                :max="10"
+                :step="1"
+                label-always
+                label />
+            </q-field>
+          </q-item-main>
+        </q-item>
+      </q-list>
+    </div>
   </div>
 </template>
 
@@ -39,11 +52,61 @@ export default {
   name: 'AnalysisPriceSliders',
   data() {
     return {
-
+      multipleSelectOptions: [],
     };
   },
   computed: {
-
+    selectOptions: {
+      get() {
+        const options = [];
+        this.$store.state.robinhood.openposition.forEach((symbol) => {
+          options.push(JSON.parse(JSON.stringify({
+            label: symbol.TDAPI,
+            value: symbol,
+            // quantity: symbol.quantity,
+          })));
+        });
+        return options;
+      },
+    },
+    // analysisSymbol: {
+    //   get() {
+    //     return this.$store.state.optionstrategy.analysisSymbol;
+    //   },
+    //   set(val) {
+    //     this.$store.dispatch('optionstrategy/changeAnalysisSymbol', val);
+    //   },
+    // },
+    analysisSymbols: {
+      get() {
+        return this.$store.state.optionstrategy.analysisSymbols;
+      },
+      set(val) {
+        this.$store.commit('optionstrategy/SET_ANALYSIS_SYMBOLS', val);
+      },
+    },
+    incrementCount: {
+      get() {
+        return this.$store.state.optionstrategy.priceIncrementCount;
+      },
+      set(val) {
+        this.$store.commit('optionstrategy/SET_PRICE_INCREMENT_COUNT', val);
+      },
+    },
+    incrementAmount: {
+      get() {
+        return this.$store.state.optionstrategy.priceIncrementAmount;
+      },
+      set(val) {
+        this.$store.commit('optionstrategy/SET_PRICE_INCREMENT_AMOUNT', val);
+      },
+    },
+  },
+  methods: {
+    updateSymbols() {
+      console.log('fired');
+      this.$store.dispatch('optionstrategy/updateSymbolPriceArrays');
+    },
   },
 };
 </script>
