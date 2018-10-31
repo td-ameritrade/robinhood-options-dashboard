@@ -53,59 +53,58 @@ export const CLEAR_POSITIONS = (state) => {
   state.openpositions = [];
 };
 
-export const OPENPOSITION = async (state, payload) => {
-  state.openpositions = payload.results.filter(e => parseFloat(e.quantity) > 0);
-  // console.log(Object.keys(state.openpositions.legs));
-  // if (position.legs.length === 1) {
-  //   Object.assign(state.positions, { state.positions.legs[0] })
-  // }
-  state.openpositions.forEach((position) => {
-    // Convert quantity to reflect long or short
-    if (position.legs[0].position_type === 'short') {
-      position.quantity *= -1.0;
-    } else {
-      position.quantity *= 1.0;
-    }
+// export const OPENPOSITION = async (state, payload) => {
+//   state.openpositions = payload.results.filter(e => parseFloat(e.quantity) > 0);
+//   // console.log(Object.keys(state.openpositions.legs));
+//   // if (position.legs.length === 1) {
+//   //   Object.assign(state.positions, { state.positions.legs[0] })
+//   // }
+//   state.openpositions.forEach((position) => {
+//     // Convert quantity to reflect long or short
+//     if (position.legs[0].position_type === 'short') {
+//       position.quantity *= -1.0;
+//     } else {
+//       position.quantity *= 1.0;
+//     }
 
 
-    // Convert type to single letter
-    if (position.legs[0].option_type === 'call') {
-      position.legs[0].option_type = 'C';
-    } else if (position.legs[0].option_type === 'put') {
-      position.legs[0].option_type = 'P';
-    }
+//     // Convert type to single letter
+//     if (position.legs[0].option_type === 'call') {
+//       position.legs[0].option_type = 'C';
+//     } else if (position.legs[0].option_type === 'put') {
+//       position.legs[0].option_type = 'P';
+//     }
 
-    // Assemble string for use in TD API quote data call
-    const month = position.legs[0].expiration_date.substr(5, 2);
-    const year = position.legs[0].expiration_date.substr(2, 2);
-    const day = position.legs[0].expiration_date.substr(8, 2);
-    const TdaSymbol = `${position.symbol}_${month}${day}${year}${position.legs[0].option_type}${(1 * position.legs[0].strike_price)}`;
+//     // Assemble string for use in TD API quote data call
+//     const month = position.legs[0].expiration_date.substr(5, 2);
+//     const year = position.legs[0].expiration_date.substr(2, 2);
+//     const day = position.legs[0].expiration_date.substr(8, 2);
 
-    // Average opening price to per contract basis
-    position.average_open_price /= 100.00;
+//     // Average opening price to per contract basis
+//     position.average_open_price /= 100.00;
 
-    const option = Object.assign(position, {
-      costbasis: ((100 * position.quantity * position.average_open_price)),
-      strike: (1 * position.legs[0].strike_price),
-      expiration: position.legs[0].expiration_date,
-      type: position.legs[0].option_type,
-      TDAPI: TdaSymbol,
-      price: '',
-      delta: '',
-      gamma: '',
-      vega: '',
-      theta: '',
-      impVol: '',
-      netliq: '',
-      gainloss: '',
-      daystoexpiration: '',
-      underlyingprice: '',
-    });
+//     const option = Object.assign(position, {
+//       costbasis: ((100 * position.quantity * position.average_open_price)),
+//       strike: (1 * position.legs[0].strike_price),
+//       expiration: position.legs[0].expiration_date,
+//       type: position.legs[0].option_type,
+//       TDAPI: TdaSymbol,
+//       price: '',
+//       delta: '',
+//       gamma: '',
+//       vega: '',
+//       theta: '',
+//       impVol: '',
+//       netliq: '',
+//       gainloss: '',
+//       daystoexpiration: '',
+//       underlyingprice: '',
+//     });
 
-    // const optionPosition = Object.assign(position, option);
-    state.openpositions = Object.assign(state.openpositions, option);
-  });
-};
+//     // const optionPosition = Object.assign(position, option);
+//     state.openpositions = Object.assign(state.openpositions, option);
+//   });
+// };
 
 
 export const ACCOUNT = (state, payload) => {

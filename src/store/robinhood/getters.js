@@ -1,10 +1,18 @@
 // eslint-disable-next-line
-export const openPositions = state => state.openpositions.filter(e => parseFloat(e.quantity) != 0);
+export const openPositions = state => state.openposition.filter(e => parseFloat(e.quantity) != 0);
 
-export const uniqueSymbols = (state) => {
+export const uniqueOptionsIds = (state) => {
+  const options = [];
+  state.openposition.forEach((position) => {
+    options.push(position.TDAPI);
+  });
+  return options.filter((item, index) => options.indexOf(item) >= index);
+};
+
+export const uniqueUnderlyingSymbols = (state) => {
   const symbols = [];
-  state.openpositions.forEach((position) => {
-    symbols.push(position.symbol);
+  state.openposition.forEach((position) => {
+    symbols.push(position.chain_symbol);
   });
   return symbols.filter((item, index) => symbols.indexOf(item) >= index);
 };
