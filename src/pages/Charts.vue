@@ -3,10 +3,7 @@
     padding
     class="row justify-center">
     <div >
-      <!-- <div style="width: 800px; max-width: 90vw;" > -->
-      <!-- <TradingVueCharts /> -->
-      <AnalysisPriceSliders />
-      <Chart />
+      <TradingVueCharts />
     </div>
   </q-page>
 </template>
@@ -16,23 +13,17 @@
 </style>
 
 <script>
-// import TradingVueCharts from '.././components/TradingVueCharts';
-import Chart from '.././components/Chart';
-import AnalysisPriceSliders from '.././components/AnalysisPriceSliders';
+import TradingVueCharts from '.././components/TradingVueCharts';
 
 export default {
   name: 'Charts',
   components: {
-    // TradingVueCharts,
-    Chart,
-    AnalysisPriceSliders,
+    TradingVueCharts,
+
   },
   data() {
     return {
     };
-  },
-  methods: {
-    //
   },
 
 };
