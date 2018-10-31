@@ -2,7 +2,8 @@
   <div class="hello">
     <VueTradingView
       :options="{
-        symbol: 'NASDAQ:AAPL',
+        // eslint-disable-next-line
+        symbol: 'AMEX:SPY',
         theme: 'dark',
     }" />
   </div>
