@@ -17,6 +17,14 @@
       />
       <q-route-tab
         slot="title"
+        icon="account balance wallet"
+        to="/Orders"
+        replace
+        exact
+        label="Orders"
+      />
+      <q-route-tab
+        slot="title"
         icon="spa"
         to="/Charts"
         replace
