@@ -119,13 +119,13 @@ export default {
   computed: {
     openposition: {
       get() {
-        return this.$store.state.robinhood.openposition;
+        return JSON.parse(JSON.stringify(this.$store.state.robinhood.openposition));
       },
     },
   },
   methods: {
     closePosition(position) {
-      console.log(position);
+      this.$store.dispatch('robinhood/closeOptionsPosition', position);
     },
   },
 };

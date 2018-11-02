@@ -8,8 +8,9 @@ export function someGetter() {
 // compute simulated price and greek values for selected symbols
 export const createSimulatedPriceArray = (state) => {
   const priceArrays = [];
+  // const totalProfit = [];
 
-  state.analysisSymbol.forEach((symbol) => {
+  state.analysisSymbols.forEach((symbol) => {
     const prices = [];
     const simProfit = [];
     const simDelta = [];
@@ -89,6 +90,11 @@ export const createSimulatedPriceArray = (state) => {
       simPosVega,
     });
   });
-
+  // priceArrays.push(totalProfit);
   return priceArrays;
 };
+
+export const sumArrays = (getters) => {
+  console.log(getters.createSimulatedPriceArray);
+};
+

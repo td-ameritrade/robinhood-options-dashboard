@@ -20,9 +20,9 @@
             <q-field helper="price increment between points">
               <q-slider
                 v-model="incrementAmount"
-                :min="0.01"
+                :min="0"
                 :max="10"
-                :step="0.05"
+                :step="0.25"
                 label-always
                 label />
             </q-field>
