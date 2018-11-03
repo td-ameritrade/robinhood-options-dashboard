@@ -2,7 +2,12 @@
   <div
     padding
     class="row justify-center">
-
+    <apexcharts
+      :options="chartOptions"
+      :series="totalProfit"
+      title="title"
+      width="500"
+      type="line"/>
     <div
       v-for="symbol in createSimulatedPriceArray"
       :key="symbol.vol"
@@ -10,13 +15,14 @@
       style="width: 500px; max-width: 90vw;">
       {{ symbol.id }}
       <apexcharts
-        :options="chartOptions"
-        :series="series"
-        title="title"
+        :options="chartOptionSetter(symbol)"
+        :series="testing(symbol)"
+        :title="testing(symbol.id)"
         width="500"
         type="line"/>
       <div>
         <button @click="updateChart()">Update!</button>
+        <button @click="sumAnalysisSymbolProfits()">Sum!</button>
       </div>
     </div>
 
@@ -55,7 +61,7 @@ export default {
       //   amount: 1.00,
       //   count: 5,
       // },
-
+      totalProfit: [],
       chartOptions: {
         chart: {
           id: 'vuechart-example',
@@ -93,10 +99,48 @@ export default {
     // },
   },
   methods: {
+    chartOptionSetter(val) {
+      const chartOptions = {
+        chart: {
+          id: val.id,
+        },
+        labels: val.prices,
+      };
+      return chartOptions;
+    },
+    testing(val) {
+      console.log(val);
 
+      const series = [];
+      // const posGreeks = {};
+      series.push({
+        name: val.id,
+        data: val.simProfit,
+      });
+      return series;
+    },
+    async sumAnalysisSymbolProfits() {
+      const totalProfit = [];
+      for (let i = 0; i < this.$store.state.optionstrategy.priceIncrementCount * 2; i += 1) {
+        totalProfit.push(0);
+      }
+      this.createSimulatedPriceArray.forEach((item) => {
+        // console.log(item);
+        for (let i = 0; i < item.simProfit.length; i += 1) {
+          // console.log(totalProfit[i], item.simProfit[i]);
+          totalProfit[i] += item.simProfit[i];
+        }
+      });
+      this.totalProfit.push({
+        name: 'Total Profit',
+        data: totalProfit,
+      });
+      console.log(totalProfit);
+    },
     async updateChart() {
       const series = [];
-
+      const greeks = [];
+      // const posGreeks = {};
       try {
         this.createSimulatedPriceArray.forEach((item) => {
           console.log(item.simProfit);
@@ -104,7 +148,22 @@ export default {
             name: item.id,
             data: item.simProfit,
           });
-
+          greeks.push({
+            name: 'delta',
+            data: item.simPosDelta,
+          });
+          greeks.push({
+            name: 'gamma',
+            data: item.simPosGamma,
+          });
+          greeks.push({
+            name: 'theta',
+            data: item.simPosTheta,
+          });
+          greeks.push({
+            name: 'vega',
+            data: item.simPosVega,
+          });
 
           // Object.assign([], { name: item.id }, { data: item.posProfit });
         });
@@ -194,7 +253,7 @@ export default {
         };
         // In the same way, update the series option
         this.series = series;
-
+        this.greeks = greeks;
         // this.greeks = [{
         //   name: 'Delta',
         //   data: chartDeltas,
