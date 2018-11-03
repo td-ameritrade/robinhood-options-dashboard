@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>
+
       <q-list>
+
         <q-item>
           <q-item-side icon="mic" />
           <q-item-main>
@@ -10,10 +12,10 @@
               :options="selectOptions"
               multiple
               float-label="Symbol for Analysis"
-              @blur="updateSymbols()"
             />
           </q-item-main>
         </q-item>
+
         <q-item>
           <q-item-side>Price Increment</q-item-side>
           <q-item-main>
@@ -28,6 +30,7 @@
             </q-field>
           </q-item-main>
         </q-item>
+
         <q-item>
           <q-item-side># Increments</q-item-side>
           <q-item-main>
@@ -42,7 +45,9 @@
             </q-field>
           </q-item-main>
         </q-item>
+
       </q-list>
+
     </div>
   </div>
 </template>
@@ -63,20 +68,11 @@ export default {
           options.push(JSON.parse(JSON.stringify({
             label: symbol.TDAPI,
             value: symbol,
-            // quantity: symbol.quantity,
           })));
         });
         return options;
       },
     },
-    // analysisSymbol: {
-    //   get() {
-    //     return this.$store.state.optionstrategy.analysisSymbol;
-    //   },
-    //   set(val) {
-    //     this.$store.dispatch('optionstrategy/changeAnalysisSymbol', val);
-    //   },
-    // },
     analysisSymbols: {
       get() {
         return this.$store.state.optionstrategy.analysisSymbols;
@@ -100,12 +96,6 @@ export default {
       set(val) {
         this.$store.commit('optionstrategy/SET_PRICE_INCREMENT_AMOUNT', val);
       },
-    },
-  },
-  methods: {
-    updateSymbols() {
-      console.log('fired');
-      // this.$store.dispatch('optionstrategy/updateSymbolPriceArrays');
     },
   },
 };

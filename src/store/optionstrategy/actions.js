@@ -4,19 +4,6 @@ const BS = require('../../services/black-scholes.js');
 
 const fixFloat = value => parseFloat(parseFloat(value).toFixed(2));
 
-// const createSimulatedPriceArray = (basePrice, count, amount) => {
-//   const prices = [];
-//   let price = basePrice - (count * amount);
-
-//   // calculate the price steps starting with the lowest (increment * -1)
-//   for (let i = count * -1; i < count; i += 1) {
-//     price += amount;
-//     prices.push(fixFloat(price));
-//   }
-//   return prices;
-// };
-
-
 export const simulatedPrices = async ({ commit, state }) => {
   const quote = await getQuote(state.analysisSymbol);
   commit('QUOTE_DATA', quote[state.analysisSymbol]);
@@ -79,47 +66,6 @@ export const calculateOptionPrice = async ({ rootState, state }) => {
   }
 };
 
-
-export const updateSymbolPriceArrays = async ({ dispatch, state, commit }, payload) => {
-  try {
-    // if (state.analysisSymbol !== payload) {
-    await dispatch('simulatedPrices');
-    await dispatch('calculateOptionPrice');
-    console.log(payload);
-    const symbols = [];
-    state.analysisSymbols.forEach((symbol) => {
-      symbols.push(symbol);
-    });
-    payload.forEach((element) => {
-      symbols.push(element);
-    });
-    const uniqueSymbols = symbols.filter((item, index) => symbols.indexOf(item) >= index);
-    await commit('SET_ANALYSIS_SYMBOLS', uniqueSymbols);
-    // }
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-
-// export const changeAnalysisSymbol = async ({ dispatch, state, commit }, payload) => {
-//   try {
-//     // if (state.analysisSymbol !== payload) {
-//     // await commit('SET_ANALYSIS_SYMBOL', payload);
-
-
-//     const symbols = [];
-//     state.analysisSymbols.forEach((symbol) => {
-//       symbols.push(symbol);
-//     });
-//     const uniqueSymbols = symbols.filter((item, index) => symbols.indexOf(payload) >= index);
-//     await commit('SET_ANALYSIS_SYMBOLS', uniqueSymbols);
-//     await dispatch('simulatedPrices');
-//     await dispatch('calculateOptionPrice');
-//     // }
-//   } catch (e) {
-//     throw new Error(e);
-//   }
-// };
 
 /* eslint-disable */
 export const aggregateUnderlyingSimulations = async ({ rootState, state, commit }) => {
