@@ -24,7 +24,7 @@
                 v-model="incrementAmount"
                 :min="0"
                 :max="10"
-                :step="0.25"
+                :step="0.10"
                 label-always
                 label />
             </q-field>
@@ -41,7 +41,8 @@
                 :max="10"
                 :step="1"
                 label-always
-                label />
+                label
+              />
             </q-field>
           </q-item-main>
         </q-item>

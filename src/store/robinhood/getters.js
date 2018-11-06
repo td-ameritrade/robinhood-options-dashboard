@@ -1,6 +1,9 @@
 // eslint-disable-next-line
 export const openPositions = state => state.openposition.filter(e => parseFloat(e.quantity) != 0);
 
+export const activeOrders = state => state.orders.filter(e => e.state !== 'filled' && e.state !== 'cancelled');
+
+
 export const uniqueOptionsIds = (state) => {
   const options = [];
   state.openposition.forEach((position) => {

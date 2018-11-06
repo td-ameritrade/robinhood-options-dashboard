@@ -6,15 +6,30 @@ const Robinhood = require('robinhood');
 const fixFloat = value => parseFloat(parseFloat(value).toFixed(2));
 
 
-export const getAccountData = async ({ commit, dispatch }) => {
-  const robinhood = await new Robinhood(userinfo.credentials, () => {
+export const getAccountData = async ({ dispatch }) => {
+  await dispatch('getAccount');
+  await dispatch('getOrders');
+  await dispatch('fetchOptionLegs');
+};
+
+
+export const getAccount = ({ commit }) => new Promise((resolve) => {
+  const robinhood = new Robinhood(userinfo.credentials, () => {
     try {
       robinhood.accounts((err, response, body) => {
-        commit('ACCOUNT', body.results);
-        dispatch('fetchOptionLegs');
+        resolve(commit('ACCOUNT', body.results));
       });
+    } catch (e) {
+      throw new Error(e);
+    }
+  });
+});
+
+export const getOrders = async ({ commit }) => {
+  const robinhood = new Robinhood(userinfo.credentials, () => {
+    try {
       robinhood.orders((err, response, body) => {
-        commit('OPTION_ORDERS', body);
+        commit('OPTION_ORDERS', body.results);
       });
     } catch (e) {
       throw new Error(e);

@@ -2,12 +2,16 @@
   <div
     padding
     class="row justify-center">
-    <apexcharts
+    <q-btn
+      color="primary"
+      class="q-ma-md"
+      @click="testing()">Refresh Robinhood Data</q-btn>
+    <!-- <apexcharts
       :options="chartOptions"
       :series="totalProfit"
       title="title"
       width="500"
-      type="line"/>
+      type="line"/> -->
     <div
       v-for="symbol in createSimulatedPriceArray"
       :key="symbol.vol"
@@ -16,8 +20,14 @@
       {{ symbol.id }}
       <apexcharts
         :options="chartOptionSetter(symbol)"
-        :series="testing(symbol)"
-        :title="testing(symbol.id)"
+        :series="simProfit(symbol)"
+        :title="simProfit(symbol.id)"
+        width="500"
+        type="line"/>
+      <apexcharts
+        :options="chartOptions"
+        :series="greeks"
+        title="Greeks"
         width="500"
         type="line"/>
       <div>
@@ -26,19 +36,6 @@
       </div>
     </div>
 
-    <div
-      class="col; q-ma-md"
-      style="width: 500px; max-width: 90vw;">
-      <apexcharts
-        :options="chartOptions"
-        :series="greeks"
-        title="title"
-        width="500"
-        type="line"/>
-      <div>
-        <!-- <button @click="updateChart()">Update!</button> -->
-      </div>
-    </div>
 
   </div>
 </template>
@@ -99,6 +96,9 @@ export default {
     // },
   },
   methods: {
+    async testing() {
+      await this.$store.dispatch('optionstrategy/simulateOptionPayoffs');
+    },
     chartOptionSetter(val) {
       const chartOptions = {
         chart: {
@@ -108,11 +108,8 @@ export default {
       };
       return chartOptions;
     },
-    testing(val) {
-      console.log(val);
-
+    simProfit(val) {
       const series = [];
-      // const posGreeks = {};
       series.push({
         name: val.id,
         data: val.simProfit,

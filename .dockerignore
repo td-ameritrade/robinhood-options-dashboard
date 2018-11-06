@@ -1,0 +1,5 @@
+.quasar
+.DS_Store
+.thumbs.db
+.directory
+/node_modules

@@ -29,7 +29,8 @@ export const ORDER = (state, payload) => {
 export const OPTION_ORDERS = (state, payload) => {
   // const temp = Object.assign({}, state.quotes);
   // state.quotes.push(payload);
-  state.orders = Object.assign({}, state.orders, payload);
+  state.orders = payload;
+  // state.orders = Object.assign({}, state.orders, payload);
 };
 
 export const UPDATE_POSITION_DATA = (state) => {
