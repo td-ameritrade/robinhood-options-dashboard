@@ -97,16 +97,10 @@ export const aggregateUnderlyingSimulations = async ({ rootState, state, commit 
 /* eslint-enable */
 
 
-export const simulateOptionPayoffs = ({ rootState, state }) => {
+export const simulateOptionPayoffs = ({ commit, rootState, state }) => {
   try {
-    const symbols = [];
-    rootState.robinhood.openposition.forEach((position) => {
-      symbols.push(JSON.parse(JSON.stringify({
-        label: position.TDAPI,
-        value: position,
-      })));
-    });
-
+    const symbols = rootState.robinhood.openposition;
+    console.log(symbols);
     const priceArrays = [];
     // const totalProfit = [];
 
@@ -190,6 +184,8 @@ export const simulateOptionPayoffs = ({ rootState, state }) => {
       });
     });
     // priceArrays.push(totalProfit);
+    commit('SET_PRICE_ARRAY', priceArrays);
+
     console.log(priceArrays);
   // return priceArrays;
   } catch (e) {
