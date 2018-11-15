@@ -15,12 +15,9 @@
     "axios": "^0.18.0",
     "chart.js": "^2.7.3",
     "greeks": "^1.0.0",
-    "laue": "^0.1.1",
     "robinhood": "git+https://github.com/ryanhendricks/robinhood-node.git#additionalfeatures",
     "vue-apexcharts": "^1.2.2",
-    "vue-chartjs": "^3.4.0",
     "vue-trading-view": "^1.0.1",
-    "vuetrend": "^0.3.2",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {

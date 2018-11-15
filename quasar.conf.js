@@ -4,7 +4,7 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'vuecharts',
+      // 'vuecharts',
       'axios',
     ],
     css: [
@@ -22,9 +22,9 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       // vueRouterMode: 'history',
       // vueCompiler: true,
-      // gzip: true,
-      // analyze: true,
-      // extractCSS: false,
+      gzip: true,
+      analyze: true,
+      extractCSS: true,
       extendWebpack(cfg) {
         cfg.module.rules.push({
           enforce: 'pre',
@@ -40,52 +40,52 @@ module.exports = function (ctx) {
       open: false, // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
-    framework: 'all',
-    // {
-    //   components: [
-    //     'QLayout',
-    //     'QLayoutHeader',
-    //     'QLayoutDrawer',
-    //     'QPageContainer',
-    //     'QPage',
-    //     'QToolbar',
-    //     'QToolbarTitle',
-    //     'QBtn',
-    //     'QIcon',
-    //     'QList',
-    //     'QListHeader',
-    //     'QItem',
-    //     'QItemMain',
-    //     'QItemSide',
-    //     'QTabs',
-    //     'QRouteTab',
-    //     'QLayoutFooter',
-    //     'QItemTile',
-    //     'QField',
-    //     'QToggle',
-    //     'QItemSeparator',
-    //     'QBtnDropdown',
-    //     'QCard',
-    //     'QCardTitle',
-    //     'QCardMain',
-    //     'QCardMedia',
-    //     'QCardSeparator',
-    //     'QCardActions',
-    //     'QChip',
-    //     'QCollapsible',
-    //     'QInput',
-    //   ],
-    //   directives: [
-    //     'Ripple',
-    //   ],
-    //   // Quasar plugins
-    //   plugins: [
-    //     'Notify',
-    //   ],
-    // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-    // i18n: 'de' // Quasar language
-    // },
-    // animations: 'all' --- includes all animations
+    framework: 
+    {
+      components: [
+        'QLayout',
+        'QLayoutHeader',
+        'QLayoutDrawer',
+        'QPageContainer',
+        'QPage',
+        'QToolbar',
+        'QToolbarTitle',
+        'QBtn',
+        'QIcon',
+        'QList',
+        'QListHeader',
+        'QItem',
+        'QItemMain',
+        'QItemSide',
+        'QTabs',
+        'QRouteTab',
+        'QLayoutFooter',
+        'QItemTile',
+        'QField',
+        'QToggle',
+        'QTable',
+        // 'QCard',
+        // 'QCardTitle',
+        // 'QCardMain',
+        // 'QCardMedia',
+        // 'QCardSeparator',
+        // 'QCardActions',
+        'QChip',
+        'QSelect',
+        'QSlider',
+        // 'QCollapsible',
+        'QInput',
+      ],
+      directives: [
+        // 'Ripple',
+      ],
+      // Quasar plugins
+      plugins: [
+        // 'Notify',
+      ],
+    iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons',
+    //i18n: 'de' // Quasar language
+    },
     animations: [],
     ssr: {
       pwa: false,

@@ -24,9 +24,9 @@ Dashboard for monitoring Robinhood account options positions.
 
 ## Configuration
 
-- Make a copy of the config.example.js file and rename to config.js
-- Replace fields with your account info.
-- Install a CORS extension for browser and add 'https://api.robinhood.com' to exposed header
+- Make a copy of the `config.example.js` file and rename to `config.js`
+- Replace fields with your Robinhood account info.
+- Install an 'allow CORS' extension for browser and add 'https://api.robinhood.com' to exposed header
 
 ## Getting Started
 
