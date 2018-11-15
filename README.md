@@ -4,6 +4,8 @@ Dashboard for monitoring Robinhood account options positions.
 
 ![./src/assets/screenshot.png](./src/assets/screenshot.png)
 
+![./src/assets/screenshot2.png](./src/assets/screenshot2.png)
+
 ## Built With
 
 - [Quasar Framework](https://quasar-framework.org/)

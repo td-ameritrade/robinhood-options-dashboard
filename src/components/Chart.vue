@@ -96,23 +96,13 @@ export default {
       series: [{
         name: 'Unique Views',
       }],
-      markers: {
-        size: 0,
-        strokeColor: '#fff',
-        strokeWidth: 3,
-        strokeOpacity: 1,
-        fillOpacity: 1,
-        hover: {
-          size: 6,
-        },
-      },
       xaxis: {
         type: 'datetime',
         axisBorder: {
-          show: false,
+          show: true,
         },
         axisTicks: {
-          show: false,
+          show: true,
         },
       },
       yaxis: {
@@ -132,15 +122,6 @@ export default {
           right: 5,
         },
       },
-      tooltip: {
-        x: {
-          format: 'dd MMM yyyy',
-        },
-      },
-      legend: {
-        position: 'top',
-        horizontalAlign: 'left',
-      },
       fill: {
         type: 'solid',
         fillOpacity: 0.7,
@@ -150,21 +131,6 @@ export default {
   computed: {
     ...mapGetters('optionstrategy', ['createSimulatedPriceArray']),
     ...mapState('optionstrategy', ['priceArray', 'analysisSymbol', 'priceIncrementAmount', 'priceIncrementCount']),
-
-
-    // selectOptions: {
-    //   get() {
-    //     const options = [];
-    //     this.openposition.forEach((symbol) => {
-    //       options.push({
-    //         label: symbol.TDAPI,
-    //         value: symbol,
-    //         // quantity: symbol.quantity,
-    //       });
-    //     });
-    //     return options;
-    //   },
-    // },
   },
   methods: {
     async testing() {
@@ -204,19 +170,19 @@ export default {
           strokeColor: '#fff',
           strokeWidth: 3,
           strokeOpacity: 1,
-          fillOpacity: 1,
+          fillOpacity: 0.1,
           hover: {
-            size: 6,
+            size: 2,
           },
         },
 
         legend: {
-          position: 'top',
-          horizontalAlign: 'left',
+          position: 'bottom',
+          horizontalAlign: 'center',
         },
         fill: {
           type: 'solid',
-          fillOpacity: 0.7,
+          fillOpacity: 1,
         },
       };
       return chartOptions;
