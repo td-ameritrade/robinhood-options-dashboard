@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-for="symbol in priceArray"
+      v-for="symbol in createSimulatedPriceArray"
       :key="symbol.vol">
       {{ symbol.id }}
       <span>
@@ -32,7 +32,7 @@
 
 <script>
 import VueApexCharts from 'vue-apexcharts';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 // const BS = require('.././services/black-scholes.js');
 // const greeks = require('.././services/greeks.js');
@@ -148,7 +148,7 @@ export default {
     };
   },
   computed: {
-    // ...mapGetters('optionstrategy', ['priceArray']),
+    ...mapGetters('optionstrategy', ['createSimulatedPriceArray']),
     ...mapState('optionstrategy', ['priceArray', 'analysisSymbol', 'priceIncrementAmount', 'priceIncrementCount']),
 
 

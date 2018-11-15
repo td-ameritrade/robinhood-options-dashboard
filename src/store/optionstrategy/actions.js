@@ -186,7 +186,6 @@ export const simulateOptionPayoffs = ({ commit, rootState, state }) => {
     // priceArrays.push(totalProfit);
     commit('SET_PRICE_ARRAY', priceArrays);
 
-    console.log(priceArrays);
   // return priceArrays;
   } catch (e) {
     throw new Error(e);

@@ -8,7 +8,6 @@
       row-key="name"
       dense
       dark
-      class="bg-black"
     />
   </div>
 </template>
