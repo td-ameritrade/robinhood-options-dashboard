@@ -8,14 +8,7 @@
         color="primary"
         class="q-ma-md"
         @click="getRobinHoodData()">Refresh Robinhood Data</q-btn>
-      <q-btn
-        color="primary"
-        class="q-ma-md"
-        @click="refreshQuoteData()">Refresh TDA Quote Data</q-btn>
-      <q-btn
-        color="primary"
-        class="q-ma-md"
-        @click="testing()">Refresh TDA Quote Data</q-btn>
+
     </div>
 
     <div
@@ -72,12 +65,6 @@ export default {
   methods: {
     async getRobinHoodData() {
       await this.$store.dispatch('robinhood/getAccountData');
-    },
-    async testing() {
-      await this.$store.dispatch('optionstrategy/simulateOptionPayoffs');
-    },
-    async getQuoteData() {
-      await this.$store.dispatch('robinhood/refreshQuoteData');
     },
   },
 

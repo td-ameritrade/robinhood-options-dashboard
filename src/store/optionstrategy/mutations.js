@@ -14,3 +14,7 @@ export const SET_PRICE_ARRAY = (state, val) => {
   state.priceArray = val;
 };
 
+
+export const SET_ANALYSIS_SYMBOLS = (state, val) => {
+  state.analysisSymbols = val;
+};
