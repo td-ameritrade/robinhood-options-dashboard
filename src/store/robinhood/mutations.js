@@ -60,6 +60,10 @@ export const CLEAR_POSITIONS = (state) => {
   state.openpositions = [];
 };
 
+export const TOGGLE_DARK_MODE = (state, val) => {
+  state.darkMode = val;
+};
+
 // export const OPENPOSITION = async (state, payload) => {
 //   state.openpositions = payload.results.filter(e => parseFloat(e.quantity) > 0);
 //   // console.log(Object.keys(state.openpositions.legs));

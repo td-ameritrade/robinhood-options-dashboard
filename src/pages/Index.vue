@@ -12,7 +12,7 @@
     </div>
 
     <div
-      style="width: 800px; max-width: 90vw;"
+
       class="q-ma-md">
       <PortfolioTable />
     </div>

@@ -28,8 +28,12 @@ export const getAccount = ({ commit }) => new Promise((resolve) => {
 export const getOrders = async ({ commit }) => {
   const robinhood = new Robinhood(userinfo.credentials, () => {
     try {
-      robinhood.orders((err, response, body) => {
-        commit('OPTION_ORDERS', body.results);
+      robinhood.options_orders((err, response, body) => {
+        commit('OPTION_ORDERS', JSON.parse(JSON.stringify(body.results)));
+        // console.log(body.results);
+        // const data = body.results.filter(e => e.created_at.substr(0, 4) === '2018');
+        // console.log(data);
+        // const data = body.results.filter(e => parseFloat(e.quantity) !== 0);
       });
     } catch (e) {
       throw new Error(e);
@@ -43,7 +47,7 @@ export const fetchOptionLegs = async ({ commit, dispatch }) => {
       robinhood.options_positions((err, response, body) => {
         // filter data to include only those positions with a quantity unequal to zero
         const data = body.results.filter(e => parseFloat(e.quantity) !== 0);
-        commit('OPENPOSITIONS', data);
+        commit('OPENPOSITIONS', JSON.parse(JSON.stringify(data)));
 
         // convert quantity to negative if short position
         data.forEach((position) => {
@@ -101,7 +105,7 @@ export const processRobinhoodOptionData = ({ dispatch }, position) => {
 export const refreshQuoteData = async ({ state, commit }) => {
   state.openposition.forEach((position) => {
     getQuote(position.TDAPI).then((res) => {
-      commit('QUOTE', res);
+      commit('QUOTE', JSON.parse(JSON.stringify(res)));
     });
   });
 };
@@ -110,13 +114,14 @@ export const refreshQuoteData = async ({ state, commit }) => {
 export const fetchQuoteData = async ({ commit }, payload) => {
   try {
     await getQuote(payload.TDAPI).then((res) => {
-      commit('QUOTE', res);
+      commit('QUOTE', JSON.parse(JSON.stringify(res)));
 
       const positionData = Object.assign(payload, {
         costbasis: 100 * payload.quantity * payload.average_price,
         // strike: 1 * payload.legs[0].strike_price,
         // expiration: payload.legs[0].expiration_date,
         // type: payload.legs[0].option_type,
+        description: res[payload.TDAPI].description,
         TDAPI: payload.TDAPI,
         price: res[payload.TDAPI].mark,
         // bid: res[payload.TDAPI].bid,
