@@ -7,12 +7,15 @@
           <q-item-main>
             <q-field helper="price increment between points">
               <q-slider
-                v-model="incrementAmount"
                 :min="0"
                 :max="10"
                 :step="0.10"
+                :value="incrementAmount"
                 label-always
-                label />
+                label
+                snap
+                @change="val => { incrementAmount = val }"
+              />
             </q-field>
           </q-item-main>
         </q-item>
@@ -25,8 +28,11 @@
                 :min="0"
                 :max="10"
                 :step="1"
+                :value="incrementCount"
                 label-always
                 label
+                snap
+                @change="val => { incrementCount = val }"
               />
             </q-field>
           </q-item-main>

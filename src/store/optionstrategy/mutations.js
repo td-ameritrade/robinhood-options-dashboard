@@ -6,6 +6,15 @@ export const SET_PRICE_INCREMENT_COUNT = (state, val) => {
   state.priceIncrementCount = val;
 };
 
+export const SET_VOL_OFFSET = (state, val) => {
+  state.volatilityOffset = val;
+};
+
+export const SET_DTE_OFFSET = (state, val) => {
+  state.dteOffset = val;
+};
+
+
 export const QUOTE_DATA = (state, val) => {
   state.quoteData = val;
 };

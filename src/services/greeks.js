@@ -230,6 +230,11 @@ function getGamma(s, k, t, v, r) {
   return (isFinite(w)) ? (_stdNormDensity(w) / (s * v * Math.sqrt(t))) : 0;
 }
 
+
+function createArrays() {
+  
+}
+
 module.exports = {
   getDelta,
   getVega,
@@ -238,3 +243,4 @@ module.exports = {
   getRho,
 };
 /* eslint-enable */
+
