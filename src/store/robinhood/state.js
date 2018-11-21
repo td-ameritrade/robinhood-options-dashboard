@@ -56,5 +56,6 @@ export default {
     costbasis: 0,
   }],
   openposition: [],
+  darkMode: true,
 };
 

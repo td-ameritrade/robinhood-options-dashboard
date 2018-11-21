@@ -4,11 +4,11 @@
       :data="openposition"
       :columns="columns"
       :pagination.sync="pagination"
+      :dark="darkMode"
+      :class="tableColor"
       title="Option Positions"
       row-key="name"
-      dense
-      dark
-      class="bg-black" />
+    />
   </div>
 </template>
 
@@ -31,36 +31,37 @@ export default {
       },
       columns: [
         {
+          name: 'ticker',
+          label: 'Ticker',
+          field: 'description',
+          sortable: true,
+        },
+        {
           name: 'Qty',
           label: 'Qty',
           field: 'quantity',
           sortable: true,
         },
-        {
-          name: 'ticker',
-          label: 'Ticker',
-          field: 'chain_symbol',
-          sortable: true,
-        },
-        {
-          name: 'expiration',
-          label: 'Expiration',
-          field: 'expiration_date',
-          sortable: true,
-        },
-        {
-          name: 'strike',
-          label: 'Strike',
-          field: 'strike_price',
-          sortable: true,
-          format: val => `${parseFloat(val).toFixed(2)}`,
-        },
-        {
-          name: 'type',
-          label: 'Type',
-          field: 'type',
-          sortable: true,
-        },
+
+        // {
+        //   name: 'expiration',
+        //   label: 'Expiration',
+        //   field: 'expiration_date',
+        //   sortable: true,
+        // },
+        // {
+        //   name: 'strike',
+        //   label: 'Strike',
+        //   field: 'strike_price',
+        //   sortable: true,
+        //   format: val => `${parseFloat(val).toFixed(2)}`,
+        // },
+        // {
+        //   name: 'type',
+        //   label: 'Type',
+        //   field: 'type',
+        //   sortable: true,
+        // },
         {
           name: 'price',
           label: 'Price',
@@ -94,7 +95,7 @@ export default {
         },
         {
           name: 'impVol',
-          label: 'Vol',
+          label: 'IV',
           field: 'impVol',
           format: val => `${parseFloat(val).toFixed(4)}`,
         },
@@ -103,8 +104,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('robinhood', ['openPositions', 'positionTotal']),
-    ...mapState('robinhood', ['positions, openposition']),
+    ...mapGetters('robinhood', ['tableColor', 'openPositions', 'positionTotal']),
+    ...mapState('robinhood', ['positions', 'openposition', 'darkMode']),
     openposition: {
       get() {
         return this.$store.state.robinhood.openposition;

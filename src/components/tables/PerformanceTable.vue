@@ -4,11 +4,11 @@
       :data="positionTotal"
       :columns="performanceColumns"
       :pagination.sync="pagination"
+      :dark="darkMode"
+      :class="tableColor"
       title="Position Summary by Performance"
       row-key="name"
       dense
-      dark
-      class="bg-black"
       color="primary"
     />
   </div>
@@ -61,7 +61,7 @@ export default {
           label: 'Delta',
           field: 'delta',
           format: val => `${val.toFixed(4)}`,
-          style: 'color: yellow',
+          style: 'color: purple',
           sortable: true,
         },
         {
@@ -97,8 +97,8 @@ export default {
   // }
 
   computed: {
-    ...mapGetters('robinhood', ['positionTotal']),
-    ...mapState('robinhood', ['openposition']),
+    ...mapGetters('robinhood', ['tableColor', 'positionTotal']),
+    ...mapState('robinhood', ['darkMode', 'openposition']),
     // quoteData: {
     //   get(symbol) {
 

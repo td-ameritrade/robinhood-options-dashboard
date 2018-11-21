@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 export const openPositions = state => state.openposition.filter(e => parseFloat(e.quantity) != 0);
 
-export const activeOrders = state => state.orders.filter(e => e.state !== 'filled' && e.state !== 'cancelled');
+export const activeOrders = state => state.orders.filter(e => e.state !== 'filled' && e.state !== 'cancelled' && e.state !== 'rejected');
 
 
 export const uniqueOptionsIds = (state) => {
@@ -58,3 +58,9 @@ export const positionTotal = (state) => {
   return positions;
 };
 
+export const tableColor = (state) => {
+  if (state.darkMode === true) {
+    return 'bg-black';
+  }
+  return 'bg-white';
+};

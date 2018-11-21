@@ -4,17 +4,17 @@
       :data="openposition"
       :columns="greeksColumns"
       :pagination.sync="pagination"
+      :dark="darkMode"
+      :class="tableColor"
       title="Greeks by Position"
       row-key="name"
       dense
-      dark
-      class="bg-black"
     />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   // name: 'ComponentName',
@@ -73,7 +73,7 @@ export default {
           label: 'Delta',
           field: 'posDelta',
           format: val => `${parseFloat(val).toFixed(4)}`,
-          style: 'color: yellow',
+          style: 'color: purple',
           sortable: true,
         },
         {
@@ -111,7 +111,8 @@ export default {
     // positionTotal() {
     //   return this.$store.getters.robinhood.positionTotal;
     // },
-    ...mapState('robinhood', ['openposition']),
+    ...mapGetters('robinhood', ['openposition', 'tableColor', 'positionTotal']),
+    ...mapState('robinhood', ['darkMode', 'openposition']),
     // quoteData: {
     //   get(symbol) {
 

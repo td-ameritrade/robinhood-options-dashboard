@@ -29,18 +29,22 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
+    <q-layout-footer>
+      <Theme />
+    </q-layout-footer>
   </q-layout>
 </template>
 
 <script>
 import { openURL } from 'quasar';
 import NavigationTabs from './NavigationTabs';
+import Theme from './Theme';
 
 export default {
   name: 'MyLayout',
   components: {
     NavigationTabs,
+    Theme,
   },
   data() {
     return {
