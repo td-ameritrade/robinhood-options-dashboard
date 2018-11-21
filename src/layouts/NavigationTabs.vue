@@ -39,6 +39,14 @@
         exact
         label="Analysis"
       />
+      <q-route-tab
+        slot="title"
+        icon="link"
+        to="/Chain"
+        replace
+        exact
+        label="Chain"
+      />
     </q-tabs>
   </div>
 </template>

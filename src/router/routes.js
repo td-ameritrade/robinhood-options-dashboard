@@ -8,6 +8,7 @@ const routes = [
       { path: 'charts/', component: () => import('pages/Charts.vue') },
       { path: 'analysis/', component: () => import('pages/Analysis.vue') },
       { path: 'orders/', component: () => import('pages/Orders.vue') },
+      { path: 'chain/', component: () => import('pages/Chain.vue') },
     ],
   },
 ];

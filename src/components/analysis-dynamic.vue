@@ -39,7 +39,7 @@
       </q-list>
     </div>
     <div
-      v-for="symbol in createSimulatedPriceArray"
+      v-for="symbol in simulatedPrices"
       :key="symbol.vol">
       {{ symbol.id }}
       <span>
@@ -169,7 +169,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('optionstrategy', ['createSimulatedPriceArray']),
+    ...mapGetters('optionstrategy', ['simulatedPrices']),
     // ...mapState('optionstrategy', ['priceArray', 'analysisSymbol',
     // 'priceIncrementAmount', 'priceIncrementCount']),
     volatilityOffset: {
